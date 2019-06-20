@@ -50,7 +50,7 @@ Class.subclass( Page.Base, "Page.History", {
 		this.events = [];
 		if (resp.rows) this.events = resp.rows;
 		
-		var cols = ['Job ID', 'Event Name', 'Category', 'Plugin', 'Hostname', 'Result', 'Start Date/Time', 'Elapsed Time'];
+		var cols = ['ID задания', 'Задание', 'Категория', 'Плагин', 'Hostname', 'Результат', 'Время начала', 'Время выполнения'];
 		
 		// html += '<div style="padding:5px 15px 15px 15px;">';
 		html += '<div style="padding:20px 20px 30px 20px">';
@@ -62,7 +62,7 @@ Class.subclass( Page.Base, "Page.History", {
 			var sorted_events = app.schedule.sort( function(a, b) {
 				return a.title.toLowerCase().localeCompare( b.title.toLowerCase() );
 			} );
-			html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_hist_event" class="subtitle_menu" onChange="$P().jump_to_event_history()"><option value="">Filter by Event</option>' + render_menu_options( sorted_events, '', false ) + '</select></div>';
+			html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_hist_event" class="subtitle_menu" onChange="$P().jump_to_event_history()"><option value="">Упорядочить по заданию</option>' + render_menu_options( sorted_events, '', false ) + '</select></div>';
 			html += '<div class="clear"></div>';
 		html += '</div>';
 		
@@ -103,7 +103,7 @@ Class.subclass( Page.Base, "Page.History", {
 				self.getNiceCategory( cat, col_width ),
 				self.getNicePlugin( plugin, col_width ),
 				self.getNiceGroup( null, job.hostname, col_width ),
-				(job.code == 0) ? '<span class="color_label green"><i class="fa fa-check">&nbsp;</i>Success</span>' : '<span class="color_label red"><i class="fa fa-warning">&nbsp;</i>Error</span>',
+				(job.code == 0) ? '<span class="color_label green"><i class="fa fa-check">&nbsp;</i>Success</span>' : '<span class="color_label red"><i class="fa fa-warning">&nbsp;</i>Ошибка</span>',
 				get_nice_date_time( job.time_start, false, true ),
 				get_text_from_seconds( job.elapsed, true, false )
 				// actions.join(' | ')
@@ -121,7 +121,7 @@ Class.subclass( Page.Base, "Page.History", {
 		
 		if (resp.rows && resp.rows.length && !num_visible_items) {
 			html += '<tr><td colspan="'+cols.length+'" align="center" style="padding-top:10px; padding-bottom:10px; font-weight:bold;">';
-			html += 'All items were deleted on this page.';
+			html += 'Все объекты были удалены на этой странице.';
 			html += '</td></tr>';
 		}
 		
@@ -155,7 +155,7 @@ Class.subclass( Page.Base, "Page.History", {
 		var col_width = Math.floor( ((size.width * 0.9) - 300) / 4 );
 		
 		var event = find_object( app.schedule, { id: args.id } ) || null;
-		if (!event) return app.doError("Could not locate event in schedule: " + args.id);
+		if (!event) return app.doError("Не могу найти задание в расписании: " + args.id);
 		
 		var cat = event.category ? find_object( app.categories, { id: event.category } ) : null;
 		var group = event.target ? find_object( app.server_groups, { id: event.target } ) : null;
@@ -166,39 +166,39 @@ Class.subclass( Page.Base, "Page.History", {
 			group.multiplex = 1;
 		}
 		
-		app.setWindowTitle( "Event Stats: " + event.title );
+		app.setWindowTitle( "Статистика задания: " + event.title );
 		this.div.removeClass('loading');
 		
 		html += this.getSidebarTabs( 'event_stats',
 			[
-				['history', "All Completed"],
-				['event_stats', "Event Stats"],
-				['event_history&id=' + args.id, "Event History"]
+				['history', "Все выполненые"],
+				['event_stats', "Статистика задания"],
+				['event_history&id=' + args.id, "История задания"]
 			]
 		);
 		html += '<div style="padding:20px 20px 30px 20px">';
 		
-		html += '<fieldset style="margin-top:0px; margin-right:0px; padding-top:10px;"><legend>Event Stats</legend>';
+		html += '<fieldset style="margin-top:0px; margin-right:0px; padding-top:10px;"><legend>Статистика задания</legend>';
 			
 			html += '<div style="float:left; width:25%;">';
-				html += '<div class="info_label">EVENT NAME</div>';
+				html += '<div class="info_label">ЗАДАНИЕ</div>';
 				html += '<div class="info_value"><a href="#Schedule?sub=edit_event&id='+event.id+'">' + this.getNiceEvent(event.title, col_width) + '</a></div>';
 				
-				html += '<div class="info_label">CATEGORY NAME</div>';
+				html += '<div class="info_label">КАТЕГОРИЯ</div>';
 				html += '<div class="info_value">' + this.getNiceCategory(cat, col_width) + '</div>';
 				
-				html += '<div class="info_label">EVENT TIMING</div>';
+				html += '<div class="info_label">ВРЕМЯ ЗАДАНИЯ</div>';
 				html += '<div class="info_value">' + (event.enabled ? summarize_event_timing(event.timing, event.timezone) : '(Disabled)') + '</div>';
 			html += '</div>';
 			
 			html += '<div style="float:left; width:25%;">';
-				html += '<div class="info_label">USERNAME</div>';
+				html += '<div class="info_label">ИМЯ ПОЛЬЗОВАТЕЛЯ</div>';
 				html += '<div class="info_value">' + this.getNiceUsername(event, false, col_width) + '</div>';
 				
-				html += '<div class="info_label">PLUGIN NAME</div>';
+				html += '<div class="info_label">ПЛАГИН</div>';
 				html += '<div class="info_value">' + this.getNicePlugin(plugin, col_width) + '</div>';
 				
-				html += '<div class="info_label">EVENT TARGET</div>';
+				html += '<div class="info_label">ЦЕЛЬ</div>';
 				html += '<div class="info_value">' + this.getNiceGroup(group, event.target, col_width) + '</div>';
 			html += '</div>';
 			
@@ -225,28 +225,28 @@ Class.subclass( Page.Base, "Page.History", {
 			var nice_last_result = 'n/a';
 			if (rows.length > 0) {
 				var job = find_object( rows, { action: 'job_complete' } );
-				if (job) nice_last_result = (job.code == 0) ? '<span class="color_label green"><i class="fa fa-check">&nbsp;</i>Success</span>' : '<span class="color_label red"><i class="fa fa-warning">&nbsp;</i>Error</span>';
+				if (job) nice_last_result = (job.code == 0) ? '<span class="color_label green"><i class="fa fa-check">&nbsp;</i>Успешно</span>' : '<span class="color_label red"><i class="fa fa-warning">&nbsp;</i>Error</span>';
 			}
 			
 			html += '<div style="float:left; width:25%;">';
-				html += '<div class="info_label">AVG. ELAPSED</div>';
+				html += '<div class="info_label">СР. ВЫПОЛНЕНИЕ</div>';
 				html += '<div class="info_value">' + get_text_from_seconds(total_elapsed / count, true, false) + '</div>';
 				
-				html += '<div class="info_label">AVG. CPU</div>';
+				html += '<div class="info_label">СР. CPU</div>';
 				html += '<div class="info_value">' + short_float(total_cpu / count) + '%</div>';
 				
-				html += '<div class="info_label">AVG. MEMORY</div>';
+				html += '<div class="info_label">СР. ПАМЯТЬ</div>';
 				html += '<div class="info_value">' + get_text_from_bytes( total_mem / count ) + '</div>';
 			html += '</div>';
 			
 			html += '<div style="float:left; width:25%;">';
-				html += '<div class="info_label">SUCCESS RATE</div>';
+				html += '<div class="info_label">ПРОЦЕНТ УСПЕХА</div>';
 				html += '<div class="info_value">' + pct(total_success, count) + '</div>';
 				
-				html += '<div class="info_label">LAST RESULT</div>';
+				html += '<div class="info_label">ПОСЛЕДНИЙ РЕЗУЛЬТАТ</div>';
 				html += '<div class="info_value" style="position:relative; top:1px;">' + nice_last_result + '</div>';
 				
-				html += '<div class="info_label">AVG. LOG SIZE</div>';
+				html += '<div class="info_label">СР. РАЗМЕР ЛОГА</div>';
 				html += '<div class="info_value">' + get_text_from_bytes( total_log_size / count ) + '</div>';
 			html += '</div>';
 			
@@ -255,7 +255,7 @@ Class.subclass( Page.Base, "Page.History", {
 		
 		// graph containers
 		html += '<div style="margin-top:15px;">';
-			html += '<div class="graph-title">Performance History</div>';
+			html += '<div class="graph-title">История выполнения</div>';
 			html += '<div id="d_graph_hist_perf" style="position:relative; width:100%; height:300px; overflow:hidden;"><canvas id="c_graph_hist_perf"></canvas></div>';
 		html += '</div>';
 		
@@ -264,11 +264,11 @@ Class.subclass( Page.Base, "Page.History", {
 		// cpu / mem graphs
 		html += '<div style="margin-top:0px;">';
 			html += '<div style="float:left; width:50%;">';
-				html += '<div class="graph-title">CPU Usage History</div>';
+				html += '<div class="graph-title">История использования CPU</div>';
 				html += '<div id="d_graph_hist_cpu" style="position:relative; width:100%; margin-right:5px; height:225px; overflow:hidden;"><canvas id="c_graph_hist_cpu"></canvas></div>';
 			html += '</div>';
 			html += '<div style="float:left; width:50%;">';
-				html += '<div class="graph-title">Memory Usage History</div>';
+				html += '<div class="graph-title">История использования RAM</div>';
 				html += '<div id="d_graph_hist_mem" style="position:relative; width:100%; margin-left:5px; height:225px; overflow:hidden;"><canvas id="c_graph_hist_mem"></canvas></div>';
 			html += '</div>';
 			html += '<div class="clear"></div>';
@@ -666,24 +666,24 @@ Class.subclass( Page.Base, "Page.History", {
 		var col_width = Math.floor( ((size.width * 0.9) - 300) / 7 );
 		
 		var event = find_object( app.schedule, { id: args.id } ) || null;
-		if (!event) return app.doError("Could not locate event in schedule: " + args.id);
+		if (!event) return app.doError("Не могу найти задание в расписании: " + args.id);
 		
-		app.setWindowTitle( "Event History: " + event.title );
+		app.setWindowTitle( "История задания:  " + event.title );
 		this.div.removeClass('loading');
 		
 		html += this.getSidebarTabs( 'event_history',
 			[
-				['history', "All Completed"],
-				['event_stats&id=' + args.id, "Event Stats"],
-				['event_history', "Event History"]
+				['history', "Все выполенные"],
+				['event_stats&id=' + args.id, "Статистика заданий"],
+				['event_history', "История заданий"]
 			]
 		);
 		html += '<div style="padding:20px 20px 30px 20px">';
 		
-		var cols = ['Job ID', 'Hostname', 'Result', 'Start Date/Time', 'Elapsed Time', 'Avg CPU', 'Avg Mem'];
+		var cols = ['ID задания', 'Hostname', 'Результат', 'Время начала', 'Время выполнения', 'Ср. CPU', 'Ср. RAM'];
 		
 		html += '<div class="subtitle">';
-			html += 'Event History: ' + event.title;
+			html += 'История события: ' + event.title;
 			html += '<div class="clear"></div>';
 		html += '</div>';
 		
@@ -702,7 +702,7 @@ Class.subclass( Page.Base, "Page.History", {
 			var tds = [
 				'<div class="td_big" style="white-space:nowrap;"><a href="#JobDetails?id='+job.id+'"><i class="fa fa-pie-chart">&nbsp;</i><b>' + job.id.substring(0, 11) + '</b></span></div>',
 				self.getNiceGroup( null, job.hostname, col_width ),
-				(job.code == 0) ? '<span class="color_label green"><i class="fa fa-check">&nbsp;</i>Success</span>' : '<span class="color_label red"><i class="fa fa-warning">&nbsp;</i>Error</span>',
+				(job.code == 0) ? '<span class="color_label green"><i class="fa fa-check">&nbsp;</i>Успешно</span>' : '<span class="color_label red"><i class="fa fa-warning">&nbsp;</i>Ошибка</span>',
 				get_nice_date_time( job.time_start, false, true ),
 				get_text_from_seconds( job.elapsed, true, false ),
 				'' + cpu_avg + '%',
@@ -715,7 +715,7 @@ Class.subclass( Page.Base, "Page.History", {
 		
 		if (resp.rows && resp.rows.length && !num_visible_items) {
 			html += '<tr><td colspan="'+cols.length+'" align="center" style="padding-top:10px; padding-bottom:10px; font-weight:bold;">';
-			html += 'All items were deleted on this page.';
+			html += 'Все объекты были удалены на этой странице.';
 			html += '</td></tr>';
 		}
 		
