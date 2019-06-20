@@ -15,20 +15,20 @@ Class.subclass( Page, "Page.Base", {
 			
 			var session_id = app.getPref('session_id') || '';
 			if (session_id) {
-				Debug.trace("User has cookie, recovering session: " + session_id);
+				Debug.trace("Найдены cookie, восстанавливаем сессию: " + session_id);
 				
 				app.api.post( 'user/resume_session', {
 					session_id: session_id
 				}, 
 				function(resp) {
 					if (resp.user) {
-						Debug.trace("User Session Resume: " + resp.username + ": " + resp.session_id);
+						Debug.trace("Восстановлена сессия пользователя: " + resp.username + ": " + resp.session_id);
 						app.hideProgress();
 						app.doUserLogin( resp );
 						Nav.refresh();
 					}
 					else {
-						Debug.trace("User cookie is invalid, redirecting to login page");
+						Debug.trace("Некорректные cookie, перенаправление на страницу авторизации");
 						// Nav.go('Login');
 						self.setPref('session_id', '');
 						self.requireLogin(args);
@@ -36,11 +36,11 @@ Class.subclass( Page, "Page.Base", {
 				} );
 			}
 			else if (app.config.external_users) {
-				Debug.trace("User is not logged in, querying external user API");
+				Debug.trace("Пользователь не авторизован, запрос внешнего пользовательского API");
 				app.doExternalLogin();
 			}
 			else {
-				Debug.trace("User is not logged in, redirecting to login page (will return to " + this.ID + ")");
+				Debug.trace("Пользователь не вошел в систему, перенаправлени на страницу авторизации(вернется к " + this.ID + ")");
 				setTimeout( function() { Nav.go('Login'); }, 1 );
 			}
 			return false;
@@ -164,17 +164,17 @@ Class.subclass( Page, "Page.Base", {
 			app.api.get('app/check_user_exists', { username: username }, function(resp) {
 				if (resp.user_exists) {
 					// username taken
-					$elem.css('color','red').html('<span class="fa fa-exclamation-triangle fa-lg">&nbsp;</span>Username Taken');
+					$elem.css('color','red').html('<span class="fa fa-exclamation-triangle fa-lg">&nbsp;</span>Имя пользователя принято');
 				}
 				else {
 					// username is valid and available!
-					$elem.css('color','green').html('<span class="fa fa-check-circle fa-lg">&nbsp;</span>Available');
+					$elem.css('color','green').html('<span class="fa fa-check-circle fa-lg">&nbsp;</span>Доступно');
 				}
 			} );
 		}
 		else if (username.length) {
 			// bad username
-			$elem.css('color','red').html('<span class="fa fa-exclamation-triangle fa-lg">&nbsp;</span>Bad Username');
+			$elem.css('color','red').html('<span class="fa fa-exclamation-triangle fa-lg">&nbsp;</span>Неверное имя пользователя');
 		}
 		else {
 			// empty
@@ -320,17 +320,17 @@ Class.subclass( Page, "Page.Base", {
 		for (var idx = margs.year() - 10; idx <= margs.year() + 10; idx++) { 
 			year_items.push(idx); 
 		}
-		html += '<td align="left"><fieldset class="dt_fs"><legend>Year</legend>';
+		html += '<td align="left"><fieldset class="dt_fs"><legend>Год</legend>';
 		html += '<select id="fe_dt_year">' + render_menu_options(year_items, margs.year()) + '</select>';
 		html += '</fieldset></td>';
 		
 		// months
-		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Month</legend>';
+		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Месяц</legend>';
 		html += '<select id="fe_dt_month">' + render_menu_options(_months, margs.month() + 1) + '</select>';
 		html += '</fieldset></td>';
 		
 		// days
-		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Day</legend>';
+		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>День</legend>';
 		html += '<select id="fe_dt_day">' + render_menu_options(_days, margs.date()) + '</select>';
 		html += '</fieldset></td>';
 		
@@ -338,7 +338,7 @@ Class.subclass( Page, "Page.Base", {
 		var hour_items = _hour_names.map( function(value, idx) {
 			return [idx, value.toUpperCase().replace(/^(\d+)(\w+)$/, '$1 $2')];
 		} );
-		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Hour</legend>';
+		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Час</legend>';
 		html += '<select id="fe_dt_hour">' + render_menu_options(hour_items, margs.hour()) + '</select>';
 		html += '</fieldset></td>';
 		
@@ -347,7 +347,7 @@ Class.subclass( Page, "Page.Base", {
 		for (var idx = 0; idx < 60; idx++) { 
 			min_items.push([ idx, (idx < 10) ? ('0'+idx) : (''+idx) ]); 
 		}
-		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Minute</legend>';
+		html += '<td align="left"><fieldset class="dt_fs" style="margin-left:5px;"><legend>Минута</legend>';
 		html += '<select id="fe_dt_minute">' + render_menu_options(min_items, margs.minute()) + '</select>';
 		html += '</fieldset></td>';
 		
