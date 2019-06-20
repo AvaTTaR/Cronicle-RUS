@@ -1,5 +1,6 @@
-Это чистый форк Cronicle с русифицированным web-интерфейсом.
+# Это чистый форк Cronicle с русифицированным web-интерфейсом.
 Для установки (пока только в качестве теста, после завершения русификации проверю работоспособность и сделаю скрипт автоустановки) :
+```
 mkdir /opt/cronicle
 cd /opt
 git clone https://github.com/AvaTTaR/Cronicle-RUS.git cronicle
@@ -9,6 +10,7 @@ node /opt/cronicle/bin/build.js dist
 #На этом моменте подкинуть свои конфиги в /opt/cronicle/conf
 /opt/cronicle/bin/control.sh setup
 /opt/cronicle/bin/control.sh start
+```
 # Node.js v10.x ALERT WARNING CAUTION
 
 There is a [known bug in Node.js v10](https://github.com/nodejs/node/issues/22149) that causes all timers to stop firing after approximately 25 days of continuous running.  Since Cronicle is a scheduler daemon, it relies *completely* on the Node.js timer system, so this is a death sentence.  The bug affects Node.js versions v10.0.0 to v10.8.0.  **The bug is fixed in Node v10.9.0**.  Your options are as follows:
