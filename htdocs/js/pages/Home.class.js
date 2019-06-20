@@ -16,7 +16,7 @@ Class.subclass( Page.Base, "Page.Home", {
 		
 		// active jobs
 		html += '<div class="subtitle">';
-			html += 'Active Jobs';
+			html += 'Активные задачи';
 			html += '<div class="clear"></div>';
 		html += '</div>';
 		html += '<div id="d_home_active_jobs"></div>';
@@ -25,7 +25,7 @@ Class.subclass( Page.Base, "Page.Home", {
 		// queued jobs
 		html += '<div id="d_home_queue_container" style="display:none">';
 			html += '<div class="subtitle">';
-				html += 'Event Queues';
+				html += 'Очередь';
 				html += '<div class="clear"></div>';
 			html += '</div>';
 			html += '<div id="d_home_queued_jobs"></div>';
@@ -48,7 +48,7 @@ Class.subclass( Page.Base, "Page.Home", {
 		if (!args) args = {};
 		this.args = args;
 		
-		app.setWindowTitle('Home');
+		app.setWindowTitle('Диспетчер заданий');
 		app.showTabBar(true);
 		
 		this.upcoming_offset = 0;
@@ -65,13 +65,13 @@ Class.subclass( Page.Base, "Page.Home", {
 		
 		// render upcoming event filters
 		var html = '';
-		html += 'Upcoming Events';
+		html += 'Ближайшие задания';
 		
-		html += '<div class="subtitle_widget"><i class="fa fa-search">&nbsp;</i><input type="text" id="fe_home_keywords" size="10" placeholder="Find events..." style="border:0px;" value="' + escape_text_field_value( args.keywords ) + '"/></div>';
+		html += '<div class="subtitle_widget"><i class="fa fa-search">&nbsp;</i><input type="text" id="fe_home_keywords" size="10" placeholder="Найти задания..." style="border:0px;" value="' + escape_text_field_value( args.keywords ) + '"/></div>';
 		
-		html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_home_target" class="subtitle_menu" style="width:75px;" onChange="$P().set_search_filters()"><option value="">All Servers</option>' + this.render_target_menu_options( args.target ) + '</select></div>';
-		html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_home_plugin" class="subtitle_menu" style="width:75px;" onChange="$P().set_search_filters()"><option value="">All Plugins</option>' + render_menu_options( app.plugins, args.plugin, false ) + '</select></div>';
-		html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_home_cat" class="subtitle_menu" style="width:95px;" onChange="$P().set_search_filters()"><option value="">All Categories</option>' + render_menu_options( app.categories, args.category, false ) + '</select></div>';
+		html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_home_target" class="subtitle_menu" style="width:75px;" onChange="$P().set_search_filters()"><option value="">Все Сервера</option>' + this.render_target_menu_options( args.target ) + '</select></div>';
+		html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_home_plugin" class="subtitle_menu" style="width:75px;" onChange="$P().set_search_filters()"><option value="">Все плагины</option>' + render_menu_options( app.plugins, args.plugin, false ) + '</select></div>';
+		html += '<div class="subtitle_widget"><i class="fa fa-chevron-down">&nbsp;</i><select id="fe_home_cat" class="subtitle_menu" style="width:95px;" onChange="$P().set_search_filters()"><option value="">Все категории</option>' + render_menu_options( app.categories, args.category, false ) + '</select></div>';
 		
 		html += '<div class="clear"></div>';
 		
@@ -101,34 +101,34 @@ Class.subclass( Page.Base, "Page.Home", {
 		var stats = app.state ? (app.state.stats || {}) : {};
 		var servers = app.servers || {};
 		
-		html += '<fieldset style="margin-top:0px; margin-right:0px; padding-top:10px;"><legend>Server Stats</legend>';
+		html += '<fieldset style="margin-top:0px; margin-right:0px; padding-top:10px;"><legend>Статистика сервера</legend>';
 			
 			html += '<div style="float:left; width:25%;">';
 				var active_events = find_objects( app.schedule, { enabled: 1 } );
 				
-				html += '<div class="info_label">TOTAL EVENTS</div>';
+				html += '<div class="info_label">ВСЕГО ЗАДАНИЙ</div>';
 				html += '<div class="info_value">' + commify( active_events.length ) + '</div>';
 				
-				html += '<div class="info_label">TOTAL CATEGORIES</div>';
+				html += '<div class="info_label">ВСЕГО КАТЕГОРИЙ</div>';
 				html += '<div class="info_value">' + commify( app.categories.length ) + '</div>';
 				
-				html += '<div class="info_label">TOTAL PLUGINS</div>';
+				html += '<div class="info_label">ВСЕГО ПЛАГИНОВ</div>';
 				html += '<div class="info_value">' + commify( app.plugins.length ) + '</div>';
 			html += '</div>';
 			
 			html += '<div style="float:left; width:25%;">';
-				html += '<div class="info_label">JOBS COMPLETED TODAY</div>';
+				html += '<div class="info_label">СЕГОДНЯ ВЫПОЛНЕНО</div>';
 				html += '<div class="info_value">' + commify( stats.jobs_completed || 0 ) + '</div>';
 				
-				html += '<div class="info_label">JOBS FAILED TODAY</div>';
+				html += '<div class="info_label">ОШИБКИ ВЫПОЛНЕНИЯ</div>';
 				html += '<div class="info_value">' + commify( stats.jobs_failed || 0 ) + '</div>';
 				
-				html += '<div class="info_label">JOB SUCCESS RATE</div>';
+				html += '<div class="info_label">ПРОЦЕНТ УСПЕХА</div>';
 				html += '<div class="info_value">' + pct( (stats.jobs_completed || 0) - (stats.jobs_failed || 0), stats.jobs_completed || 1 ) + '</div>';
 			html += '</div>';
 			
 			html += '<div style="float:left; width:25%;">';
-				html += '<div class="info_label">TOTAL SERVERS</div>';
+				html += '<div class="info_label">ВСЕГО СЕРВЕРОВ</div>';
 				html += '<div class="info_value">' + commify( num_keys(servers) ) + '</div>';
 				
 				var total_cpu = 0;
@@ -147,24 +147,24 @@ Class.subclass( Page.Base, "Page.Home", {
 					if (job.cpu) total_cpu += (job.cpu.current || 0);
 					if (job.mem) total_mem += (job.mem.current || 0);
 				}
-				html += '<div class="info_label">TOTAL CPU IN USE</div>';
+				html += '<div class="info_label">Загрузка CPU</div>';
 				html += '<div class="info_value">' + short_float(total_cpu) + '%</div>';
 				
-				html += '<div class="info_label">TOTAL RAM IN USE</div>';
+				html += '<div class="info_label">ИСПОЛЬЗУЕМАЯ RAM</div>';
 				html += '<div class="info_value">' + get_text_from_bytes(total_mem) + '</div>';
 			html += '</div>';
 			
 			html += '<div style="float:left; width:25%;">';
 				var mserver = servers[ app.masterHostname ] || {};
-				html += '<div class="info_label">MASTER SERVER UPTIME</div>';
+				html += '<div class="info_label">UPTIME МАСТЕРА</div>';
 				html += '<div class="info_value">' + get_text_from_seconds( mserver.uptime || 0, false, true ) + '</div>';
 				
 				var job_avg = (stats.jobs_elapsed || 0) / (stats.jobs_completed || 1);
-				html += '<div class="info_label">AVERAGE JOB DURATION</div>';
+				html += '<div class="info_label">СРЕДНЕЕ ВРЕМЯ ВЫПОЛНЕНИЯ</div>';
 				html += '<div class="info_value">' + get_text_from_seconds( job_avg, false, true ) + '</div>';
 				
 				var log_size_avg = (stats.jobs_log_size || 0) / (stats.jobs_completed || 1);
-				html += '<div class="info_label">AVERAGE JOB LOG SIZE</div>';
+				html += '<div class="info_label">СРЕДНИЙ РАЗМЕР ЛОГА</div>';
 				html += '<div class="info_value">' + get_text_from_bytes(log_size_avg) + '</div>';
 			html += '</div>';
 			
@@ -251,7 +251,7 @@ Class.subclass( Page.Base, "Page.Home", {
 		var size = get_inner_window_size();
 		var col_width = Math.floor( ((size.width * 0.9) + 50) / 7 );
 		
-		var cols = ['Event Name', 'Category', 'Plugin', 'Target', 'Scheduled Time', 'Countdown', 'Actions'];
+		var cols = ['Задание', 'Категория', 'Плагин', 'Цель', 'Время по расписанию', 'Время до выполнения', 'Действия'];
 		var limit = 25;
 		
 		html += this.getPaginatedTable({
@@ -273,7 +273,7 @@ Class.subclass( Page.Base, "Page.Home", {
 				var margs = moment.tz(stub.epoch * 1000, item.timezone || app.tz);
 				
 				var actions = [
-					'<a href="#Schedule?sub=edit_event&id='+item.id+'"><b>Edit Event</b></a>'
+					'<a href="#Schedule?sub=edit_event&id='+item.id+'"><b>Редактировать задание</b></a>'
 				];
 				
 				var cat = item.category ? find_object( app.categories, { id: item.category } ) : null;
@@ -331,14 +331,14 @@ Class.subclass( Page.Base, "Page.Home", {
 			return (a.time_start < b.time_start) ? 1 : -1;
 		} );
 		
-		var cols = ['Job ID', 'Event Name', 'Category', 'Hostname', 'Elapsed', 'Progress', 'Remaining', 'Actions'];
+		var cols = ['ID Задания', 'Задание', 'Категория', 'Hostname', 'Истекло', 'Прогресс', 'Осталось', 'Действия'];
 		
 		// render table
 		var self = this;
 		html += this.getBasicTable( this.jobs, cols, 'active job', function(job, idx) {
 			var actions = [
 				// '<span class="link" onMouseUp="$P().go_job_details('+idx+')"><b>Details</b></span>',
-				'<span class="link" onMouseUp="$P().abort_job('+idx+')"><b>Abort Job</b></span>'
+				'<span class="link" onMouseUp="$P().abort_job('+idx+')"><b>Отменить задание</b></span>'
 			];
 			
 			var cat = job.category ? find_object( app.categories || [], { id: job.category } ) : { title: 'n/a' };
@@ -415,7 +415,7 @@ Class.subclass( Page.Base, "Page.Home", {
 		
 		var size = get_inner_window_size();
 		var col_width = Math.floor( ((size.width * 0.9) + 50) / 6 );
-		var cols = ['Event Name', 'Category', 'Plugin', 'Target', 'Queued Jobs', 'Actions'];
+		var cols = ['Имя задания', 'Категория', 'Плагин', 'Цель', 'Очередь заданий', 'Действия'];
 		
 		var stubs = [];
 		var sorted_ids = hash_keys_to_array(app.eventQueue).sort( function(a, b) {
@@ -441,7 +441,7 @@ Class.subclass( Page.Base, "Page.Home", {
 			var plugin = item.plugin ? find_object( app.plugins, { id: item.plugin } ) : null;
 			
 			var actions = [
-				'<span class="link" onMouseUp="$P().flush_event_queue('+idx+')"><b>Flush Queue</b></span>'
+				'<span class="link" onMouseUp="$P().flush_event_queue('+idx+')"><b>Очистка очереди</b></span>'
 			];
 			
 			var tds = [
@@ -476,12 +476,12 @@ Class.subclass( Page.Base, "Page.Home", {
 		// abort job, after confirmation
 		var job = this.jobs[idx];
 		
-		app.confirm( '<span style="color:red">Abort Job</span>', "Are you sure you want to abort the job &ldquo;<b>"+job.id+"</b>&rdquo;?</br>(Event: "+job.event_title+")", "Abort", function(result) {
+		app.confirm( '<span style="color:red">Отмена задания</span>', "Вы уверены, что хотите отменить задание &ldquo;<b>"+job.id+"</b>&rdquo;?</br>(Задание: "+job.event_title+")", "Отмена", function(result) {
 			if (result) {
-				app.showProgress( 1.0, "Aborting job..." );
+				app.showProgress( 1.0, "Отмена задания..." );
 				app.api.post( 'app/abort_job', job, function(resp) {
 					app.hideProgress();
-					app.showMessage('success', "Job '"+job.event_title+"' was aborted successfully.");
+					app.showMessage('success', "Задание '"+job.event_title+"' было успешно отменено.");
 				} );
 			}
 		} );
@@ -491,12 +491,12 @@ Class.subclass( Page.Base, "Page.Home", {
 		// abort job, after confirmation
 		var stub = this.queue_stubs[idx];
 		
-		app.confirm( '<span style="color:red">Flush Event Queue</span>', "Are you sure you want to flush the queue for event &ldquo;<b>"+stub.title+"</b>&rdquo;?", "Flush", function(result) {
+		app.confirm( '<span style="color:red">Очистка очереди заданий</span>', "Вы уверены, что хотите очистить очередь задания &ldquo;<b>"+stub.title+"</b>&rdquo;?", "Очистка", function(result) {
 			if (result) {
-				app.showProgress( 1.0, "Flushing event queue..." );
+				app.showProgress( 1.0, "Очистка очереди заданий..." );
 				app.api.post( 'app/flush_event_queue', stub, function(resp) {
 					app.hideProgress();
-					app.showMessage('success', "Event queue for '"+stub.title+"' was flushed successfully.");
+					app.showMessage('success', "Очередь для '"+stub.title+"' была успешно очищена.");
 				} );
 			}
 		} );
